@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Production grade Fullstack Next.js starter template",
 };
 
-const page = () => {
+const Page = () => {
   return (
     <section className="grid h-dvh place-items-center">
       <div className="space-y-4 text-center">
@@ -21,4 +21,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
