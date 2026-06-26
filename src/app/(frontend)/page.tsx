@@ -2,17 +2,19 @@ import ToastButton from "@/components/Buttons/ToastButton";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Next.js Starter Fullstack",
-  description: "Production grade Fullstack Next.js starter template",
+  title: "Notifo",
+  description:
+    "A notes application built with Next.js, TypeScript, Tailwind CSS, and more.",
 };
 
 const page = () => {
   return (
     <section className="grid h-dvh place-items-center">
       <div className="space-y-4 text-center">
-        <h1 className="text-5xl font-semibold">Next.js Starter Fullstack</h1>
+        <h1 className="text-5xl font-semibold">Notifo</h1>
         <h2 className="text-3xl">
-          Production grade Fullstack Next.js starter template
+          A notes application built with Next.js, TypeScript, Tailwind CSS, and
+          more.
         </h2>
 
         <ToastButton />
