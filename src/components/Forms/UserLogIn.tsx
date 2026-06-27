@@ -3,7 +3,8 @@
 import { logInFormSchema } from "@/lib/schema/zodSchema";
 import { LogInType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader, Send } from "lucide-react";
+import { Eye, EyeOff, Loader, Send } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
 import { Checkbox } from "../shadcnui/checkbox";
@@ -13,6 +14,7 @@ import { Input } from "../shadcnui/input";
 const UserLogIn = () => {
   const {
     handleSubmit,
+    watch,
     control,
     formState: { isSubmitting },
     reset,
@@ -25,6 +27,9 @@ const UserLogIn = () => {
       rememberMe: true,
     },
   });
+
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogIn = async (lData: LogInType) => {
     // TODO: Implement actual login logic using better-auth
@@ -63,13 +68,31 @@ const UserLogIn = () => {
         render={({ field, fieldState }) => (
           <Field data-invalid={!!fieldState.invalid}>
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Input
-              {...field}
-              id="password"
-              type="password"
-              placeholder="Password"
-              aria-invalid={!!fieldState.invalid}
-            />
+            <div className="relative">
+              <Input
+                {...field}
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="password"
+                aria-invalid={!!fieldState.invalid}
+                className="pr-10"
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={() => {
+                  field.onBlur();
+                  setIsPasswordFocused(false);
+                }}
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="text-muted-foreground hover:text-foreground absolute inset-y-0 right-3 flex items-center transition-colors focus-visible:outline-none">
+                {showPassword ?
+                  <EyeOff className="size-4" />
+                : <Eye className="size-4" />}
+              </button>
+            </div>
+
             {fieldState.error && (
               <FieldError>{fieldState.error.message}</FieldError>
             )}
