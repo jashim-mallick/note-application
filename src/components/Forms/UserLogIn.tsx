@@ -3,7 +3,7 @@
 import { logInFormSchema } from "@/lib/schema/zodSchema";
 import { LogInType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderIcon, SendIcon } from "lucide-react";
+import { Loader, Send } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
 import { Checkbox } from "../shadcnui/checkbox";
@@ -27,7 +27,7 @@ const UserLogIn = () => {
   });
 
   const handleLogIn = async (lData: LogInType) => {
-    console.log(lData);
+    // TODO: Implement actual login logic using better-auth
     reset();
   };
 
@@ -105,11 +105,11 @@ const UserLogIn = () => {
         disabled={isSubmitting}>
         {isSubmitting ?
           <>
-            <LoaderIcon className="animate-spin" />
+            <Loader className="animate-spin" />
             submitting..
           </>
         : <>
-            <SendIcon /> submit
+            <Send /> submit
           </>
         }
       </Button>

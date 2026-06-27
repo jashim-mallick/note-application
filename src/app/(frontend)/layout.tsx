@@ -4,7 +4,7 @@ type FrontendLayoutProps = {
   children: React.ReactNode;
 };
 
-const FrontendLayout = async ({ children }: FrontendLayoutProps) => {
+const FrontendLayout = ({ children }: FrontendLayoutProps) => {
   return (
     <div className="relative min-h-screen">
       <PublicHeader />

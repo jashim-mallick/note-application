@@ -12,7 +12,7 @@ export const auth = betterAuth({
     requireEmailVerification: false,
   },
   advanced: {
-    cookiePrefix: "nofito",
+    cookiePrefix: "notifo",
     database: {
       generateId: false,
     },

@@ -4,7 +4,7 @@ import { registerFormSchema } from "@/lib/schema/zodSchema";
 import { RegisterType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LoaderIcon, SendIcon } from "lucide-react";
+import { Loader, Send } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
@@ -30,7 +30,7 @@ const UserRegistration = () => {
   });
 
   const handleRegister = async (rData: RegisterType) => {
-    console.log(rData);
+    // TODO: Implement actual registration logic using better-auth
 
     reset();
   };
@@ -126,11 +126,11 @@ const UserRegistration = () => {
         disabled={isSubmitting}>
         {isSubmitting ?
           <>
-            <LoaderIcon className="animate-spin" />
+            <Loader className="animate-spin" />
             submitting..
           </>
         : <>
-            <SendIcon /> submit
+            <Send /> submit
           </>
         }
       </Button>
