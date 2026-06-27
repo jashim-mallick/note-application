@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcnui/card";
+import { TextAnimate } from "@/components/shadcnui/text-animate";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -25,7 +26,16 @@ const page = () => {
           </CardTitle>
 
           <CardDescription className="text-center text-sm leading-5 sm:text-base">
-            Welcome back to Notifo
+            Welcome back to{" "}
+            <span>
+              <TextAnimate
+                animation="blurInUp"
+                by="character"
+                duration={2}
+                className="text-primary font-medium">
+                Notifo?
+              </TextAnimate>
+            </span>
           </CardDescription>
         </CardHeader>
 
@@ -34,7 +44,15 @@ const page = () => {
         </CardContent>
 
         <CardFooter className="flex flex-wrap justify-center gap-1 px-4 pb-6 text-sm sm:text-base">
-          New to Notifo?
+          New to{" "}
+          <span>
+            <TextAnimate
+              animation="blurInUp"
+              by="character"
+              duration={2}>
+              Notifo?
+            </TextAnimate>
+          </span>
           <Link
             href="/auth/register"
             className="text-primary ml-1 font-medium">

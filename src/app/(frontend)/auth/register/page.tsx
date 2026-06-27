@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcnui/card";
+import { TextAnimate } from "@/components/shadcnui/text-animate";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -25,7 +26,14 @@ const page = () => {
           </CardTitle>
 
           <CardDescription className="text-center text-sm leading-5 sm:text-base">
-            Please provide your details to start the registration process.
+            Please provide your details to start the registration process to{" "}
+            <TextAnimate
+              animation="blurInUp"
+              by="character"
+              duration={2}
+              className="font-medium">
+              Notifo
+            </TextAnimate>
           </CardDescription>
         </CardHeader>
 
