@@ -8,7 +8,12 @@ type ThemeProviderProps = ComponentProps<typeof NextThemesProvider>;
 
 const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
   return (
-    <NextThemesProvider {...props}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+      {...props}>
       {children}
 
       <ToastProvider />
