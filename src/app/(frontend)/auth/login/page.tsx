@@ -44,15 +44,7 @@ const page = () => {
         </CardContent>
 
         <CardFooter className="flex flex-wrap justify-center gap-1 px-4 pb-6 text-sm sm:text-base">
-          New to{" "}
-          <span>
-            <TextAnimate
-              animation="blurInUp"
-              by="character"
-              duration={2}>
-              Notifo?
-            </TextAnimate>
-          </span>
+          New to Notifo?
           <Link
             href="/auth/register"
             className="text-primary ml-1 font-medium">
