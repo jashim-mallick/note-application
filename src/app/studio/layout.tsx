@@ -4,7 +4,7 @@ type StudioLayoutProps = {
   children: React.ReactNode;
 };
 
-const StudioLayout = async ({ children }: StudioLayoutProps) => {
+const StudioLayout = ({ children }: StudioLayoutProps) => {
   return (
     <div className="relative min-h-screen">
       <PrivateHeader />
