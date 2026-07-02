@@ -33,7 +33,7 @@ const page = () => {
                 by="character"
                 duration={2}
                 className="text-primary font-medium">
-                Notifo?
+                Notifo
               </TextAnimate>
             </span>
           </CardDescription>

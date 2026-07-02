@@ -1,8 +1,8 @@
 import z from "zod";
 
 export const clientEnvSchema = z.object({
-  NEXT_PUBLIC_BETTER_AUTH_URL: z.url({
-    error: "NEXT_PUBLIC_BETTER_AUTH_URL must be a valid URL",
+  NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url({
+    message: "NEXT_PUBLIC_BETTER_AUTH_URL must be a valid URL",
   }),
 });
 

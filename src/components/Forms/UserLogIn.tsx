@@ -14,7 +14,6 @@ import { Input } from "../shadcnui/input";
 const UserLogIn = () => {
   const {
     handleSubmit,
-    watch,
     control,
     formState: { isSubmitting },
     reset,
@@ -28,7 +27,6 @@ const UserLogIn = () => {
     },
   });
 
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogIn = async (lData: LogInType) => {
@@ -76,11 +74,7 @@ const UserLogIn = () => {
                 placeholder="password"
                 aria-invalid={!!fieldState.invalid}
                 className="pr-10"
-                onFocus={() => setIsPasswordFocused(true)}
-                onBlur={() => {
-                  field.onBlur();
-                  setIsPasswordFocused(false);
-                }}
+                onBlur={field.onBlur}
               />
               <button
                 type="button"

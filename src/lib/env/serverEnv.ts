@@ -1,11 +1,13 @@
 import z from "zod";
 
 export const serverEnvSchema = z.object({
-  DATABASE_URL: z.string().min(1, { error: "DATABASE_URL is required" }),
-  BETTER_AUTH_URL: z.url({ error: "BETTER_AUTH_URL must be a valid URL" }),
+  DATABASE_URL: z.string().min(1, { message: "DATABASE_URL is required" }),
+  BETTER_AUTH_URL: z
+    .string()
+    .url({ message: "BETTER_AUTH_URL must be a valid URL" }),
   BETTER_AUTH_SECRET: z
     .string()
-    .min(1, { error: "BETTER_AUTH_SECRET is required" }),
+    .min(1, { message: "BETTER_AUTH_SECRET is required" }),
 });
 
 const serverEnvVars = {

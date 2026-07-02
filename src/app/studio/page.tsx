@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "WhiteDwarf | Dashboard",
-  description: "A beautiful wallpaper Application",
+  title: "Notifo | Dashboard",
+  description: "Dashboard of Notifo notes application",
 };
 
 const page = () => {
