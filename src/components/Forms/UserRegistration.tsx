@@ -4,9 +4,11 @@ import { registerFormSchema } from "@/lib/schema/zodSchema";
 import { RegisterType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import registerAction from "@/hooks/server/registerAction";
 import { Eye, EyeOff, Loader, Send } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { Button } from "../shadcnui/button";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
 import { Input } from "../shadcnui/input";
@@ -36,7 +38,13 @@ const UserRegistration = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleRegister = async (rData: RegisterType) => {
-    // TODO: Implement actual registration logic using better-auth
+    const { success, message } = await registerAction(rData);
+
+    if (success) {
+      toast.success(message);
+    } else {
+      toast.error(message);
+    }
     reset();
   };
 
