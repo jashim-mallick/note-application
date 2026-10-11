@@ -1,11 +1,14 @@
 "use client";
 
+import logInAction from "@/hooks/logInAction";
 import { logInFormSchema } from "@/lib/schema/zodSchema";
 import { LogInType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader, Send } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { Button } from "../shadcnui/button";
 import { Checkbox } from "../shadcnui/checkbox";
 import { Field, FieldError, FieldLabel } from "../shadcnui/field";
@@ -30,8 +33,16 @@ const UserLogIn = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogIn = async (lData: LogInType) => {
-    // TODO: Implement actual login logic using better-auth
-    reset();
+    const { success, message } = await logInAction(lData);
+
+    if (success) {
+      toast.success(message);
+      reset();
+      redirect("/studio");
+    } else {
+      console.error(message);
+      toast.error(message);
+    }
   };
 
   return (

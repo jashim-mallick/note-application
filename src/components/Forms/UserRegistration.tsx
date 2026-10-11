@@ -4,8 +4,9 @@ import { registerFormSchema } from "@/lib/schema/zodSchema";
 import { RegisterType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import registerAction from "@/hooks/server/registerAction";
+import registerAction from "@/hooks/registerAction";
 import { Eye, EyeOff, Loader, Send } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -43,6 +44,7 @@ const UserRegistration = () => {
     if (success) {
       toast.success(message);
       reset();
+      redirect("/auth/login");
     } else {
       toast.error(message);
     }
