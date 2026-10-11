@@ -3,7 +3,7 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "emailverified" BOOLEAN NOT NULL DEFAULT false,
+    "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "image" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
@@ -16,14 +16,14 @@ CREATE TABLE "sessions" (
     "token" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "ipAddress" TEXT NOT NULL,
-    "userAgent" TEXT NOT NULL,
+    "ipAddress" TEXT,
+    "userAgent" TEXT,
     "userId" TEXT NOT NULL,
     CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "account" (
+CREATE TABLE "accounts" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "accountId" TEXT NOT NULL,
     "providerId" TEXT NOT NULL,
@@ -37,11 +37,11 @@ CREATE TABLE "account" (
     "password" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "verification" (
+CREATE TABLE "verifications" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "identifier" TEXT NOT NULL,
     "value" TEXT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE "verification" (
 );
 
 -- CreateTable
-CREATE TABLE "wallpaper" (
+CREATE TABLE "backgrounds" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "image" TEXT NOT NULL,
     "blurDataURL" TEXT,
@@ -59,18 +59,20 @@ CREATE TABLE "wallpaper" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "userId" TEXT NOT NULL,
-    CONSTRAINT "wallpaper_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "backgrounds_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "note" (
+CREATE TABLE "notes" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "title" TEXT NOT NULL,
+    "title" TEXT,
     "content" TEXT NOT NULL,
+    "backgroundId" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "userId" TEXT NOT NULL,
-    CONSTRAINT "note_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "notes_backgroundId_fkey" FOREIGN KEY ("backgroundId") REFERENCES "backgrounds" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "notes_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex
@@ -83,19 +85,19 @@ CREATE INDEX "sessions_userId_idx" ON "sessions"("userId");
 CREATE UNIQUE INDEX "sessions_token_key" ON "sessions"("token");
 
 -- CreateIndex
-CREATE INDEX "account_userId_idx" ON "account"("userId");
+CREATE INDEX "accounts_userId_idx" ON "accounts"("userId");
 
 -- CreateIndex
-CREATE INDEX "verification_identifier_idx" ON "verification"("identifier");
+CREATE INDEX "verifications_identifier_idx" ON "verifications"("identifier");
 
 -- CreateIndex
-CREATE INDEX "wallpaper_userId_idx" ON "wallpaper"("userId");
+CREATE INDEX "backgrounds_userId_idx" ON "backgrounds"("userId");
 
 -- CreateIndex
-CREATE INDEX "wallpaper_createdAt_idx" ON "wallpaper"("createdAt");
+CREATE INDEX "backgrounds_createdAt_idx" ON "backgrounds"("createdAt");
 
 -- CreateIndex
-CREATE INDEX "note_userId_idx" ON "note"("userId");
+CREATE INDEX "notes_userId_idx" ON "notes"("userId");
 
 -- CreateIndex
-CREATE INDEX "note_createdAt_idx" ON "note"("createdAt");
+CREATE INDEX "notes_createdAt_idx" ON "notes"("createdAt");
