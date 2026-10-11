@@ -5,7 +5,7 @@ import { logInFormSchema } from "@/lib/schema/zodSchema";
 import { LogInType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader, Send } from "lucide-react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -15,6 +15,7 @@ import { Field, FieldError, FieldLabel } from "../shadcnui/field";
 import { Input } from "../shadcnui/input";
 
 const UserLogIn = () => {
+  const { push } = useRouter();
   const {
     handleSubmit,
     control,
@@ -38,7 +39,7 @@ const UserLogIn = () => {
     if (success) {
       toast.success(message);
       reset();
-      redirect("/studio");
+      push("/studio");
     } else {
       console.error(message);
       toast.error(message);
