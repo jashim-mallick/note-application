@@ -42,10 +42,10 @@ const UserRegistration = () => {
 
     if (success) {
       toast.success(message);
+      reset();
     } else {
       toast.error(message);
     }
-    reset();
   };
 
   return (

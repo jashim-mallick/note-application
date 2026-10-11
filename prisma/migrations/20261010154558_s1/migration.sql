@@ -6,8 +6,10 @@
   - You are about to drop the `verification` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `wallpaper` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the column `emailverified` on the `users` table. All the data in the column will be lost.
-
 */
+
+  -- NOTE: Dev-only migration. Existing data in the dropped tables is
+-- intentionally discarded. Do NOT apply to any environment with real data.
 -- DropIndex
 DROP INDEX "account_userId_idx";
 
@@ -127,7 +129,8 @@ CREATE TABLE "new_users" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
 );
-INSERT INTO "new_users" ("createdAt", "email", "id", "image", "name", "updatedAt") SELECT "createdAt", "email", "id", "image", "name", "updatedAt" FROM "users";
+INSERT INTO "new_users" ("createdAt", "email", "id", "emailVerified", "image", "name", "updatedAt") 
+SELECT "createdAt", "email", "id", "emailVerified", "image", "name", "updatedAt" FROM "users";
 DROP TABLE "users";
 ALTER TABLE "new_users" RENAME TO "users";
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
