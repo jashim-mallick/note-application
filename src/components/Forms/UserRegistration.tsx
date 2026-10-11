@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import registerAction from "@/hooks/registerAction";
 import { Eye, EyeOff, Loader, Send } from "lucide-react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ import { Input } from "../shadcnui/input";
 import PasswordChecklist from "./PasswordChecklist";
 
 const UserRegistration = () => {
+  const { push } = useRouter();
   const {
     handleSubmit,
     control,
@@ -44,7 +45,7 @@ const UserRegistration = () => {
     if (success) {
       toast.success(message);
       reset();
-      redirect("/auth/login");
+      push("/auth/login");
     } else {
       toast.error(message);
     }
