@@ -17,7 +17,8 @@ const registerAction = async ({ name, email, password }: RegisterType) => {
     }
     return {
       success: true,
-      message: `${data?.user?.name ?? "user"} registered successfully!`,
+      message:
+        "Registration request received. If this email is not already in use, your account is ready.",
     };
   } catch (error) {
     console.error("Signup error:", error);
