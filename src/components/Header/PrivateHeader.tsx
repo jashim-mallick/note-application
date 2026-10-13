@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogOutButton from "../Buttons/LogOutButton";
 import ThemeToggleButton from "../Buttons/ThemeToggleButton";
 
 const PrivateHeader = () => {
@@ -19,7 +20,7 @@ const PrivateHeader = () => {
 
         <nav className="hidden items-center gap-4 sm:flex">
           <ThemeToggleButton />
-          {/* **TODO: Add a logout button here**  */}
+          <LogOutButton />
         </nav>
       </div>
     </header>

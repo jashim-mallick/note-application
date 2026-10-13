@@ -5,7 +5,8 @@ import { logInFormSchema } from "@/lib/schema/zodSchema";
 import { LogInType } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader, Send } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Route } from "next";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -16,6 +17,8 @@ import { Input } from "../shadcnui/input";
 
 const UserLogIn = () => {
   const { push } = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     handleSubmit,
     control,
@@ -39,7 +42,15 @@ const UserLogIn = () => {
     if (success) {
       toast.success(message);
       reset();
-      push("/studio");
+
+      const callback = searchParams.get("callbackUrl");
+
+      const safeCallback =
+        callback && callback.startsWith("/") && !callback.startsWith("//") ?
+          callback
+        : "/studio";
+
+      push(safeCallback as Route);
     } else {
       console.error(message);
       toast.error(message);
