@@ -2,10 +2,13 @@
 
 import { authClient } from "@/lib/betterAuth/auth-client";
 import { LogOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation"; // ← add this
 import { toast } from "react-toastify";
 import { Button } from "../shadcnui/button";
 
 const LogOutButton = () => {
+  const router = useRouter(); // ← add this
+
   const handleLogOut = async () => {
     try {
       const { error } = await authClient.signOut();
@@ -15,9 +18,7 @@ const LogOutButton = () => {
         return;
       }
 
-      toast.success("Logged out successfully 👋");
-
-      window.location.href = "/auth/login";
+      router.push("/auth/login?loggedOut=true");
     } catch (error) {
       console.error(error);
       toast.error("Logout failed 👾");

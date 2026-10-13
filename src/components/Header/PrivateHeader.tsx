@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LogOutButton from "../Buttons/LogOutButton";
 import ThemeToggleButton from "../Buttons/ThemeToggleButton";
+import PrivateDrawer from "../Drawer/PrivateDrawer";
 
 const PrivateHeader = () => {
   return (
@@ -22,6 +23,10 @@ const PrivateHeader = () => {
           <ThemeToggleButton />
           <LogOutButton />
         </nav>
+
+        <div className="sm:hidden">
+          <PrivateDrawer />
+        </div>
       </div>
     </header>
   );
