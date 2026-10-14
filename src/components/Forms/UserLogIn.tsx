@@ -36,6 +36,21 @@ const UserLogIn = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const getSafeCallback = (callback: string | null): string => {
+    if (!callback) return "/studio";
+    try {
+      const currentOrigin = window.location.origin;
+      const resolvedUrl = new URL(callback, currentOrigin);
+
+      if (resolvedUrl.origin === currentOrigin) {
+        return resolvedUrl.pathname + resolvedUrl.search + resolvedUrl.hash;
+      }
+    } catch (e) {
+      console.error("Invalid callback URL:", e);
+    }
+    return "/studio";
+  };
+
   const handleLogIn = async (lData: LogInType) => {
     const { success, message } = await logInAction(lData);
 
@@ -45,12 +60,9 @@ const UserLogIn = () => {
 
       const callback = searchParams.get("callbackUrl");
 
-      const safeCallback =
-        callback && callback.startsWith("/") && !callback.startsWith("//") ?
-          callback
-        : "/studio";
+      const safeCallback = getSafeCallback(callback) as Route;
 
-      push(safeCallback as Route);
+      push(safeCallback);
     } else {
       console.error(message);
       toast.error(message);

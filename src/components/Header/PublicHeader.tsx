@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import ThemeToggleButton from "../Buttons/ThemeToggleButton";
+import PublicDrawer from "../Drawer/PublicDrawer";
 
 const PublicHeader = () => {
   return (
@@ -22,6 +23,12 @@ const PublicHeader = () => {
         <nav className="hidden items-center gap-4 text-xl sm:flex">
           <ThemeToggleButton />
         </nav>
+
+        <div
+          className="sm:hidden"
+          aria-hidden="true">
+          <PublicDrawer />
+        </div>
       </div>
     </header>
   );
