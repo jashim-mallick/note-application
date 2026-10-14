@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import LogOutButton from "../Buttons/LogOutButton";
 import ThemeToggleButton from "../Buttons/ThemeToggleButton";
+import { Button } from "../shadcnui/button";
 import {
   Sheet,
   SheetClose,
@@ -17,15 +18,12 @@ const PrivateDrawer = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button
+        <Button
           type="button"
           className="inline-flex items-center justify-center rounded-full bg-white/10 p-2 text-white hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none"
           aria-label="Open menu">
-          <Menu
-            className="size-6"
-            strokeWidth={2}
-          />
-        </button>
+          <Menu />
+        </Button>
       </SheetTrigger>
 
       <SheetContent
@@ -34,7 +32,6 @@ const PrivateDrawer = () => {
         <SheetTitle className="hidden">User Menu</SheetTitle>
 
         <div className="flex flex-col gap-6 px-4">
-          {/* Profile Section — TODO: Add profile page */}
           <div className="flex flex-col items-center gap-3 pt-4">
             <SheetClose asChild>
               <Link href="/">
@@ -80,7 +77,6 @@ const PrivateDrawer = () => {
               </Link>
             </SheetClose>
 
-            {/* TODO: Add create page route */}
             <SheetClose asChild>
               <Link
                 href="/"
