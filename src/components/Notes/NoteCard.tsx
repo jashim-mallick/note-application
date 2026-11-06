@@ -1,6 +1,7 @@
 import { getBackgroundImage } from "@/lib/backgrounds";
 import { format } from "date-fns";
 import { Pin, PinOff, Trash2 } from "lucide-react";
+import { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../shadcnui/button";
@@ -98,7 +99,7 @@ const NoteCard = ({
       </CardFooter>
       \
       <Link
-        href={`/studio/notes/${id}`}
+        href={`/studio/notes/${id}` as Route}
         className="absolute inset-0"
         aria-label={`Open note: ${title ?? "Untitled"}`}
       />

@@ -93,6 +93,7 @@ model Note {
   title        String?
   content      String
   backgroundId String?
+  isPinned     Boolean     @default(false)
   background   Background? @relation(fields: [backgroundId], references: [id], onDelete: SetNull)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
