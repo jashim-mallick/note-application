@@ -47,6 +47,7 @@ const page = async () => {
               content={note.content}
               createdAt={note.createdAt}
               backgroundId={note.backgroundId}
+              isPinned={note.isPinned}
             />
           ))}
         </div>
