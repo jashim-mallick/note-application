@@ -1,16 +1,9 @@
+import QuickNoteForm from "@/components/Forms/QuickNoteForm";
 import NoteCard from "@/components/Notes/NoteCard";
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
-import { CirclePlus } from "lucide-react";
-import { Metadata } from "next";
 import { headers } from "next/headers";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-
-export const metadata: Metadata = {
-  title: "Notifo | Dashboard",
-  description: "Dashboard of Notifo notes application",
-};
 
 const page = async () => {
   const session = await auth.api.getSession({
@@ -23,20 +16,19 @@ const page = async () => {
     where: { userId: session.user.id },
     orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
   });
+
   return (
     <div className="container mx-auto p-6">
+      <QuickNoteForm />
+
       <h1 className="mb-6 text-2xl font-bold">Your Notes</h1>
 
       {notes.length === 0 ?
         <div className="text-muted-foreground flex flex-col items-center justify-center py-20">
           <p className="text-lg">No notes yet</p>
-          <p className="text-sm">Create your first note to get started!</p>
-          <Link
-            href="/studio/create"
-            className="text-primary mt-2 flex items-center gap-2 hover:underline">
-            <CirclePlus className="size-6" />
-            <span>Create your first note</span>
-          </Link>
+          <p className="text-sm">
+            Create your first note above to get started!
+          </p>
         </div>
       : <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {notes.map((note) => (
@@ -55,5 +47,4 @@ const page = async () => {
     </div>
   );
 };
-
 export default page;
