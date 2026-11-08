@@ -3,3 +3,9 @@ import { logInFormSchema, registerFormSchema } from "./schema/zodSchema";
 
 export type RegisterType = z.infer<typeof registerFormSchema>;
 export type LogInType = z.infer<typeof logInFormSchema>;
+
+export type CreateNote = {
+  title: string;
+  content: string;
+  backgroundId?: string | null;
+};

@@ -56,7 +56,7 @@ const NoteCard = ({
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="line-clamp-1 text-base">
-            {title ?? "Untitled"}
+            {title?.trim() ? title : "Untitled"}
           </CardTitle>
           {isPinned && <Pin className="size-4 shrink-0 text-amber-500" />}
         </div>
