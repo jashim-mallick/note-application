@@ -40,26 +40,23 @@ const NoteCard = ({
     content.length > 120 ? content.slice(0, 120).trimEnd() + "…" : content;
 
   return (
-    <Card className="group relative flex h-full flex-col overflow-hidden transition-shadow hover:shadow-md">
+    <Card className="group relative isolate flex h-full flex-col overflow-hidden transition-shadow hover:shadow-md">
       {backgroundImage && (
-        <>
-          <div className="absolute inset-0 -z-10">
-            <Image
-              src={backgroundImage}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </div>
-
-          <div className="bg-background/70 absolute inset-0 -z-10" />
-        </>
+        <div className="absolute inset-0 -z-10">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+          <div className="bg-background/70 absolute inset-0" />
+        </div>
       )}
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="line-clamp-1 text-base">
-            {title ?? "Untitled"}
+            {title?.trim() ? title : "Untitled"}
           </CardTitle>
           {isPinned && <Pin className="size-4 shrink-0 text-amber-500" />}
         </div>
@@ -67,12 +64,12 @@ const NoteCard = ({
       <CardContent className="flex-1 pb-2">
         <p className="text-muted-foreground line-clamp-3 text-sm">{excerpt}</p>
       </CardContent>
-      <CardFooter className="flex items-center justify-between pt-2">
+      <CardFooter className="relative z-10 flex items-center justify-between pt-2">
         <span className="text-muted-foreground text-xs">
           {format(new Date(createdAt), "MMM d, yyyy")}
         </span>
 
-        <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="flex gap-1 transition-opacity md:opacity-0 md:group-hover:opacity-100">
           {onPinToggle && (
             <Button
               variant="ghost"
@@ -97,7 +94,6 @@ const NoteCard = ({
           )}
         </div>
       </CardFooter>
-      \
       <Link
         href={`/studio/notes/${id}` as Route}
         className="absolute inset-0"
