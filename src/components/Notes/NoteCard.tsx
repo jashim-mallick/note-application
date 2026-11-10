@@ -47,6 +47,7 @@ const NoteCard = ({
             src={backgroundImage}
             alt=""
             fill
+            loading="eager"
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
@@ -80,7 +81,7 @@ const NoteCard = ({
           {format(new Date(createdAt), "MMM d, yyyy")}
         </span>
 
-        <div className="flex gap-1 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+        <div className="flex gap-1 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
           {onPinToggle && (
             <Button
               variant="ghost"
