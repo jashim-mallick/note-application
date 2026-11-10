@@ -53,19 +53,28 @@ const NoteCard = ({
           <div className="bg-background/70 absolute inset-0" />
         </div>
       )}
-      <CardHeader className="relative z-10 pb-2">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="line-clamp-1 text-base">
-            {title?.trim() ? title : "Untitled"}
-          </CardTitle>
-          {isPinned && (
-            <Pin className="size-4 shrink-0 fill-amber-500 text-amber-500" />
-          )}
-        </div>
-      </CardHeader>
-      <CardContent className="flex-1 pb-2">
-        <p className="text-muted-foreground line-clamp-3 text-sm">{excerpt}</p>
-      </CardContent>
+
+      <Link
+        href={`/studio/notes/${id}` as Route}
+        className="flex flex-1 flex-col"
+        aria-label={`Open note: ${title ?? "Untitled"}`}>
+        <CardHeader className="pb-2">
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle className="line-clamp-1 text-base">
+              {title?.trim() ? title : "Untitled"}
+            </CardTitle>
+            {isPinned && (
+              <Pin className="size-4 shrink-0 fill-amber-500 text-amber-500" />
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="flex-1 pb-2">
+          <p className="text-muted-foreground line-clamp-3 text-sm">
+            {excerpt}
+          </p>
+        </CardContent>
+      </Link>
+
       <CardFooter className="relative z-10 flex items-center justify-between pt-2">
         <span className="text-muted-foreground text-xs">
           {format(new Date(createdAt), "MMM d, yyyy")}
@@ -96,11 +105,6 @@ const NoteCard = ({
           )}
         </div>
       </CardFooter>
-      <Link
-        href={`/studio/notes/${id}` as Route}
-        className="absolute inset-0"
-        aria-label={`Open note: ${title ?? "Untitled"}`}
-      />
     </Card>
   );
 };
