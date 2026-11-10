@@ -2,14 +2,11 @@
 
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
+import { noteSchema } from "@/lib/schema/noteSchema";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-export const createNoteAction = async (data: {
-  title: string | null;
-  content: string;
-  backgroundId?: string | null;
-}) => {
+export const createNoteAction = async (data: unknown) => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -22,11 +19,24 @@ export const createNoteAction = async (data: {
       };
     }
 
+    //zod validation
+    const validation = noteSchema.safeParse(data);
+
+    if (!validation.success) {
+      return {
+        isSuccess: false,
+        message: "Invalid input data",
+        errors: validation.error.flatten().fieldErrors,
+      };
+    }
+
+    const { title, content, backgroundId } = validation.data;
+
     await prisma.note.create({
       data: {
-        title: data.title ?? "",
-        content: data.content,
-        backgroundId: data.backgroundId,
+        title: title ?? "",
+        content,
+        backgroundId: backgroundId ?? null,
         userId: session.user.id,
       },
     });

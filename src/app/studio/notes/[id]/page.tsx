@@ -94,14 +94,16 @@ const Page = async ({ params }: NotePageProps) => {
       </article>
 
       <div className="mt-6 flex justify-end gap-3">
-        <Link href={`/studio/notes/${note.id}/edit`}>
-          <Button variant="outline">
-            Edit Note
-            {/* TODO: Add edit functionality */}
-          </Button>
-        </Link>
+        <Button
+          variant="outline"
+          disabled>
+          Edit Note
+          {/* TODO: Add edit functionality */}
+        </Button>
 
-        <Button variant="destructive">
+        <Button
+          variant="destructive"
+          disabled>
           <Trash2 className="mr-2 size-4" />
           Delete
           {/* TODO: Add delete functionality */}
