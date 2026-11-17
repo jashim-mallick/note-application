@@ -2,7 +2,7 @@
 
 import { getBackgroundImage } from "@/lib/backgrounds";
 import { format } from "date-fns";
-import { Pin, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Pin, Trash2 } from "lucide-react";
 import { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "../shadcnui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../shadcnui/dropdown-menu";
 
 type NoteCardProps = {
   id: string;
@@ -23,7 +30,9 @@ type NoteCardProps = {
   backgroundId?: string | null;
   isPinned?: boolean;
   onPinToggle?: (id: string) => void;
+  onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  isLoading?: boolean;
 };
 
 const NoteCard = ({
@@ -34,7 +43,9 @@ const NoteCard = ({
   backgroundId,
   isPinned = false,
   onPinToggle,
+  onEdit,
   onDelete,
+  isLoading = false,
 }: NoteCardProps) => {
   const backgroundImage = getBackgroundImage(backgroundId ?? null);
 
@@ -60,32 +71,13 @@ const NoteCard = ({
         href={`/studio/notes/${id}` as Route}
         className="flex flex-1 flex-col"
         aria-label={`Open note: ${title ?? "Untitled"}${isPinned ? " (Pinned)" : ""}`}>
-        <CardHeader className="pb-2">
-          <div className="flex items-start justify-between gap-2">
-            <CardTitle className="line-clamp-1 flex-1 text-base">
-              {title?.trim() ? title : "Untitled"}
-            </CardTitle>
-            {onPinToggle && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-7 shrink-0"
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent link navigation
-                  e.stopPropagation();
-                  onPinToggle(id);
-                }}
-                aria-label={isPinned ? "Unpin note" : "Pin note"}>
-                <Pin
-                  className={`size-4 transition-colors ${
-                    isPinned ?
-                      "fill-amber-500 text-amber-500"
-                    : "text-muted-foreground hover:text-foreground"
-                  }`}
-                />
-              </Button>
-            )}
-          </div>
+        <CardHeader className="flex items-center gap-1 px-4">
+          <CardTitle className="line-clamp-1 text-base">
+            {title?.trim() ? title : "Untitled"}
+          </CardTitle>
+          <span className="text-muted-foreground text-xs">
+            {format(new Date(createdAt), "MMM d, yyyy")}
+          </span>
         </CardHeader>
         <CardContent className="flex-1 pb-2">
           <p className="text-muted-foreground line-clamp-3 text-sm">
@@ -94,22 +86,67 @@ const NoteCard = ({
         </CardContent>
       </Link>
 
-      <CardFooter className="relative z-10 flex items-center justify-between pt-2">
-        <span className="text-muted-foreground text-xs">
-          {format(new Date(createdAt), "MMM d, yyyy")}
-        </span>
+      {onPinToggle && (
+        <div className="absolute top-2 right-2 z-30">
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={isLoading}
+            className="bg-background/50 hover:bg-background/80 size-7 shrink-0 backdrop-blur-sm disabled:opacity-50"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onPinToggle(id);
+            }}
+            aria-label={isPinned ? "Unpin note" : "Pin note"}>
+            <Pin
+              className={`size-4 transition-colors ${
+                isPinned ?
+                  "fill-amber-500 text-amber-500"
+                : "text-muted-foreground hover:text-foreground"
+              }`}
+            />
+          </Button>
+        </div>
+      )}
 
-        <div className="flex gap-1 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
-          {onDelete && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-destructive hover:text-destructive size-7"
-              onClick={() => onDelete(id)}
-              aria-label="Delete note">
-              <Trash2 className="size-3.5" />
-            </Button>
-          )}
+      <CardFooter className="relative z-30 flex items-center justify-end pt-2">
+        <div className="absolute right-4 flex gap-1 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className="text-muted-foreground hover:text-foreground bg-background/50 hover:bg-background/80 size-4 rounded-md backdrop-blur-sm"
+              disabled={isLoading}
+              aria-label="More options">
+              <MoreVertical className="size-4" />
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="end"
+              className="z-50 w-40"
+              sideOffset={5}>
+              {onEdit && (
+                <DropdownMenuItem
+                  disabled={isLoading}
+                  className="cursor-pointer gap-2"
+                  onClick={() => onEdit(id)}>
+                  <Pencil className="size-3.5" />
+                  Edit
+                </DropdownMenuItem>
+              )}
+
+              {onEdit && onDelete && <DropdownMenuSeparator />}
+
+              {onDelete && (
+                <DropdownMenuItem
+                  disabled={isLoading}
+                  className="text-destructive focus:text-destructive cursor-pointer gap-2"
+                  onClick={() => onDelete(id)}>
+                  <Trash2 className="size-3.5" />
+                  Delete
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardFooter>
     </Card>
