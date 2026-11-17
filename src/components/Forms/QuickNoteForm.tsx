@@ -29,7 +29,8 @@ const QuickNoteForm = () => {
     formState: { isSubmitting },
   } = useForm<NoteType>({
     resolver: zodResolver(noteSchema),
-    mode: "onBlur",
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       title: "",
       content: "",
@@ -92,7 +93,7 @@ const QuickNoteForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className={cn(
           "bg-card relative isolate rounded-lg border shadow-sm transition-all",
-          isExpanded && "ring-border ring-1",
+          isExpanded && "ring-border px-2 ring-1",
         )}
         noValidate>
         {isExpanded && backgroundImage && (

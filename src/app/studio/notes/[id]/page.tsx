@@ -1,9 +1,10 @@
+import DeleteNoteButton from "@/components/Buttons/DeleteNoteButton";
 import { Button } from "@/components/shadcnui/button";
 import { getBackgroundImage } from "@/lib/backgrounds";
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
 import { format } from "date-fns";
-import { ArrowLeft, Pin, Trash2 } from "lucide-react";
+import { ArrowLeft, Pin } from "lucide-react";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -101,13 +102,7 @@ const Page = async ({ params }: NotePageProps) => {
           {/* TODO: Add edit functionality */}
         </Button>
 
-        <Button
-          variant="destructive"
-          disabled>
-          <Trash2 className="mr-2 size-4" />
-          Delete
-          {/* TODO: Add delete functionality */}
-        </Button>
+        <DeleteNoteButton noteId={note.id} />
       </div>
     </div>
   );
