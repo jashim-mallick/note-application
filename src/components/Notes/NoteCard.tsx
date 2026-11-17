@@ -1,6 +1,8 @@
+"use client";
+
 import { getBackgroundImage } from "@/lib/backgrounds";
 import { format } from "date-fns";
-import { Pin, PinOff, Trash2 } from "lucide-react";
+import { Pin, Trash2 } from "lucide-react";
 import { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -47,7 +49,6 @@ const NoteCard = ({
             src={backgroundImage}
             alt=""
             fill
-            loading="eager"
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
@@ -58,14 +59,31 @@ const NoteCard = ({
       <Link
         href={`/studio/notes/${id}` as Route}
         className="flex flex-1 flex-col"
-        aria-label={`Open note: ${title ?? "Untitled"}`}>
+        aria-label={`Open note: ${title ?? "Untitled"}${isPinned ? " (Pinned)" : ""}`}>
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">
-            <CardTitle className="line-clamp-1 text-base">
+            <CardTitle className="line-clamp-1 flex-1 text-base">
               {title?.trim() ? title : "Untitled"}
             </CardTitle>
-            {isPinned && (
-              <Pin className="size-4 shrink-0 fill-amber-500 text-amber-500" />
+            {onPinToggle && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 shrink-0"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent link navigation
+                  e.stopPropagation();
+                  onPinToggle(id);
+                }}
+                aria-label={isPinned ? "Unpin note" : "Pin note"}>
+                <Pin
+                  className={`size-4 transition-colors ${
+                    isPinned ?
+                      "fill-amber-500 text-amber-500"
+                    : "text-muted-foreground hover:text-foreground"
+                  }`}
+                />
+              </Button>
             )}
           </div>
         </CardHeader>
@@ -82,18 +100,6 @@ const NoteCard = ({
         </span>
 
         <div className="flex gap-1 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
-          {onPinToggle && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-7"
-              onClick={() => onPinToggle(id)}
-              aria-label={isPinned ? "Unpin note" : "Pin note"}>
-              {isPinned ?
-                <PinOff className="size-3.5" />
-              : <Pin className="size-3.5" />}
-            </Button>
-          )}
           {onDelete && (
             <Button
               variant="ghost"

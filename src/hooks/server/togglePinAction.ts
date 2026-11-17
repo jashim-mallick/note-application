@@ -1,3 +1,5 @@
+"use server";
+
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
 import { revalidatePath } from "next/cache";

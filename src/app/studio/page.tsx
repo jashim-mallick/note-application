@@ -1,5 +1,5 @@
 import QuickNoteForm from "@/components/Forms/QuickNoteForm";
-import NoteCard from "@/components/Notes/NoteCard";
+import NoteCardAction from "@/components/Notes/NoteCardAction";
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
 import { headers } from "next/headers";
@@ -32,7 +32,7 @@ const page = async () => {
         </div>
       : <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {notes.map((note) => (
-            <NoteCard
+            <NoteCardAction
               key={note.id}
               id={note.id}
               title={note.title}

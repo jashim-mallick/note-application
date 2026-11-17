@@ -32,10 +32,18 @@ export const createNoteAction = async (data: unknown) => {
 
     const { title, content, backgroundId } = validation.data;
 
+    if (!content.trim()) {
+      return {
+        isSuccess: false,
+        message: "Content cannot be empty",
+        errors: { content: ["Content cannot be empty"] },
+      };
+    }
+
     await prisma.note.create({
       data: {
         title: title ?? "",
-        content,
+        content: content.trim(),
         backgroundId: backgroundId ?? null,
         userId: session.user.id,
       },
