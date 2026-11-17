@@ -47,29 +47,41 @@ const NoteCard = ({
             src={backgroundImage}
             alt=""
             fill
+            loading="eager"
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <div className="bg-background/70 absolute inset-0" />
         </div>
       )}
-      <CardHeader className="pb-2">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="line-clamp-1 text-base">
-            {title?.trim() ? title : "Untitled"}
-          </CardTitle>
-          {isPinned && <Pin className="size-4 shrink-0 text-amber-500" />}
-        </div>
-      </CardHeader>
-      <CardContent className="flex-1 pb-2">
-        <p className="text-muted-foreground line-clamp-3 text-sm">{excerpt}</p>
-      </CardContent>
+
+      <Link
+        href={`/studio/notes/${id}` as Route}
+        className="flex flex-1 flex-col"
+        aria-label={`Open note: ${title ?? "Untitled"}`}>
+        <CardHeader className="pb-2">
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle className="line-clamp-1 text-base">
+              {title?.trim() ? title : "Untitled"}
+            </CardTitle>
+            {isPinned && (
+              <Pin className="size-4 shrink-0 fill-amber-500 text-amber-500" />
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="flex-1 pb-2">
+          <p className="text-muted-foreground line-clamp-3 text-sm">
+            {excerpt}
+          </p>
+        </CardContent>
+      </Link>
+
       <CardFooter className="relative z-10 flex items-center justify-between pt-2">
         <span className="text-muted-foreground text-xs">
           {format(new Date(createdAt), "MMM d, yyyy")}
         </span>
 
-        <div className="flex gap-1 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+        <div className="flex gap-1 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
           {onPinToggle && (
             <Button
               variant="ghost"
@@ -94,11 +106,6 @@ const NoteCard = ({
           )}
         </div>
       </CardFooter>
-      <Link
-        href={`/studio/notes/${id}` as Route}
-        className="absolute inset-0"
-        aria-label={`Open note: ${title ?? "Untitled"}`}
-      />
     </Card>
   );
 };

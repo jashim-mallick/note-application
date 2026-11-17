@@ -49,7 +49,7 @@ const QuickNoteForm = () => {
       if (formRef.current && !formRef.current.contains(e.target as Node)) {
         if (!title && !content) {
           setIsExpanded(false);
-          reset({ backgroundId: null });
+          reset();
         }
       }
     };
@@ -75,21 +75,23 @@ const QuickNoteForm = () => {
       console.error(result.message);
     }
   };
-
   const handleClose = () => {
-    if (!title && !content) {
-      setIsExpanded(false);
-      reset({ backgroundId: null });
-    }
-  };
+    const hasContent = title?.trim() || content?.trim();
 
+    if (hasContent && !confirm("Discard unsaved note?")) {
+      return;
+    }
+
+    setIsExpanded(false);
+    reset({ title: "", content: "", backgroundId: null });
+  };
   return (
     <div className="mx-auto mb-8 w-full max-w-2xl">
       <form
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
         className={cn(
-          "bg-card relative rounded-lg border shadow-sm transition-all",
+          "bg-card relative isolate rounded-lg border shadow-sm transition-all",
           isExpanded && "ring-border ring-1",
         )}
         noValidate>
