@@ -4,7 +4,7 @@ import deleteNoteAction from "@/hooks/server/deleteNoteAction";
 import togglePinAction from "@/hooks/server/togglePinAction";
 import { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import NoteCard from "./NoteCard";
 
@@ -20,14 +20,30 @@ type NoteCardActionsProps = {
 const NoteCardAction = (props: NoteCardActionsProps) => {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
+  const isPendingRef = useRef(false);
 
-  const handlePinToggle = async (id: string) => {
-    console.log("Pin toggle clicked for:", id);
-    if (isPending) return;
-
+  const acquireGuard = () => {
+    if (isPendingRef.current) return false;
+    isPendingRef.current = true;
     setIsPending(true);
+    return true;
+  };
+
+  const releaseGuard = () => {
+    isPendingRef.current = false;
+    setIsPending(false);
+  };
+
+  const handlePinToggle = async (id: string, shouldPin: boolean) => {
+    console.log(`Pin toggle clicked for: ${id}, shouldPin: ${shouldPin}`);
+
+    if (!acquireGuard()) {
+      console.log("Pin toggle blocked - already pending");
+      return;
+    }
+
     try {
-      const result = await togglePinAction(id);
+      const result = await togglePinAction(id, shouldPin);
       console.log("Pin toggle result:", result);
 
       if (!result.isSuccess) {
@@ -35,14 +51,15 @@ const NoteCardAction = (props: NoteCardActionsProps) => {
           description: "Please try again or refresh the page",
           action: {
             label: "Retry",
-            onClick: () => handlePinToggle(id),
+            onClick: () => handlePinToggle(id, shouldPin),
           },
         });
+        releaseGuard();
         return;
       }
 
       toast.success(
-        result.message || (props.isPinned ? "Note unpinned" : "Note pinned"),
+        result.message || (shouldPin ? "Note pinned" : "Note unpinned"),
       );
     } catch (error) {
       console.error("Pin toggle error:", error);
@@ -53,23 +70,22 @@ const NoteCardAction = (props: NoteCardActionsProps) => {
           : "Please check your connection",
         action: {
           label: "Retry",
-          onClick: () => handlePinToggle(id),
+          onClick: () => handlePinToggle(id, shouldPin),
         },
       });
     } finally {
-      setIsPending(false);
+      releaseGuard();
     }
   };
 
   const handleDelete = async (id: string) => {
     console.log("Delete handler called for:", id);
 
-    if (isPending) {
+    if (!acquireGuard()) {
       console.log("Delete blocked - already pending");
       return;
     }
 
-    setIsPending(true);
     console.log("Calling deleteNoteAction...");
 
     try {
@@ -85,13 +101,12 @@ const NoteCardAction = (props: NoteCardActionsProps) => {
             onClick: () => handleDelete(id),
           },
         });
-        setIsPending(false);
+        releaseGuard();
         return;
       }
 
       console.log("Delete successful!");
       toast.success("Note deleted successfully");
-
       router.refresh();
     } catch (error) {
       console.error("Delete exception:", error);
@@ -103,20 +118,24 @@ const NoteCardAction = (props: NoteCardActionsProps) => {
           onClick: () => handleDelete(id),
         },
       });
-      setIsPending(false);
+      releaseGuard();
     }
   };
 
   const handleEdit = (id: string) => {
-    console.log("Edit clicked for:", id);
-    router.push(`/studio/notes/${id}/edit` as Route);
+    router.push(`/studio/editNote/${id}` as Route);
+  };
+
+  const onPinToggle = (id: string) => {
+    const shouldPin = !props.isPinned;
+    handlePinToggle(id, shouldPin);
   };
 
   return (
     <NoteCard
       {...props}
       isLoading={isPending}
-      onPinToggle={handlePinToggle}
+      onPinToggle={onPinToggle}
       onEdit={handleEdit}
       onDelete={handleDelete}
     />

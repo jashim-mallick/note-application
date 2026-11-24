@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const noteSchema = z.object({
+const noteSchema = z.object({
   title: z.string().max(70, "Title must be at most 70 characters").optional(),
   content: z
     .string()
@@ -10,4 +10,11 @@ export const noteSchema = z.object({
   backgroundId: z.string().nullable().optional(),
 });
 
+export const createNoteSchema = noteSchema;
+
+export const updateNoteSchema = noteSchema.extend({
+  id: z.string().min(1, "Note ID is required"),
+});
+
 export type NoteType = z.infer<typeof noteSchema>;
+export type UpdateNoteType = z.infer<typeof updateNoteSchema>;

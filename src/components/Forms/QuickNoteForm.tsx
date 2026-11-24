@@ -1,8 +1,9 @@
 "use client";
 
-import { createNoteAction } from "@/hooks/server/CreateNoteAction";
 import { getBackgroundImage } from "@/lib/backgrounds";
-import { noteSchema, NoteType } from "@/lib/schema/noteSchema";
+
+import { createNoteAction } from "@/hooks/server/createNoteAction";
+import { createNoteSchema, NoteType } from "@/lib/schema/noteSchema";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -28,7 +29,7 @@ const QuickNoteForm = () => {
     reset,
     formState: { isSubmitting },
   } = useForm<NoteType>({
-    resolver: zodResolver(noteSchema),
+    resolver: zodResolver(createNoteSchema),
     mode: "onSubmit",
     reValidateMode: "onChange",
     defaultValues: {

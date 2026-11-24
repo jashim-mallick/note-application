@@ -2,7 +2,8 @@
 
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
-import { noteSchema } from "@/lib/schema/noteSchema";
+import { createNoteSchema } from "@/lib/schema/noteSchema";
+
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -20,7 +21,7 @@ export const createNoteAction = async (data: unknown) => {
     }
 
     //zod validation
-    const validation = noteSchema.safeParse(data);
+    const validation = createNoteSchema.safeParse(data);
 
     if (!validation.success) {
       return {

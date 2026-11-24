@@ -17,6 +17,10 @@ const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
       {children}
 
       <ToastProvider />
+      {/* <Toaster
+        richColors
+        position="top-right"
+      /> */}
     </NextThemesProvider>
   );
 };
