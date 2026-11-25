@@ -5,6 +5,11 @@ import prisma from "@/lib/database/dbClient";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+export const metadata = {
+  title: "Notifo | Studio",
+  description: "Studio of Notifo notes application",
+};
+
 const page = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),

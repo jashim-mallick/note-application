@@ -5,7 +5,15 @@ import prisma from "@/lib/database/dbClient";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-const togglePinAction = async (noteId: string) => {
+type ActionResult = {
+  isSuccess: boolean;
+  message: string;
+};
+
+const togglePinAction = async (
+  id: string,
+  shouldPin: boolean,
+): Promise<ActionResult> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -19,7 +27,7 @@ const togglePinAction = async (noteId: string) => {
     }
 
     const note = await prisma.note.findFirst({
-      where: { id: noteId, userId: session.user.id },
+      where: { id: id, userId: session.user.id },
       select: { isPinned: true },
     });
 
@@ -31,17 +39,15 @@ const togglePinAction = async (noteId: string) => {
     }
 
     await prisma.note.update({
-      where: { id: noteId, userId: session.user.id },
-      data: { isPinned: !note.isPinned },
+      where: { id: id, userId: session.user.id },
+      data: { isPinned: shouldPin },
     });
 
     revalidatePath("/studio");
     return {
       isSuccess: true,
       message:
-        note.isPinned ?
-          "Note unpinned successfully"
-        : "Note pinned successfully",
+        shouldPin ? "Note pinned successfully" : "Note unpinned successfully",
     };
   } catch (error) {
     console.error("Failed to toggle pin:", error);
