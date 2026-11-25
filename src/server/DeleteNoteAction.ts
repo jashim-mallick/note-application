@@ -5,7 +5,7 @@ import prisma from "@/lib/database/dbClient";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-const deleteNoteAction = async (noteId: string) => {
+const DeleteNoteAction = async (noteId: string) => {
   console.log("Server: Delete action called for noteId:", noteId);
 
   try {
@@ -66,4 +66,4 @@ const deleteNoteAction = async (noteId: string) => {
   }
 };
 
-export default deleteNoteAction;
+export default DeleteNoteAction;

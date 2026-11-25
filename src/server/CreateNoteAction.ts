@@ -7,7 +7,7 @@ import { createNoteSchema } from "@/lib/schema/noteSchema";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-export const createNoteAction = async (data: unknown) => {
+export const CreateNoteAction = async (data: unknown) => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),

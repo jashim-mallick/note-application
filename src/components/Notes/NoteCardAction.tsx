@@ -1,7 +1,7 @@
 "use client";
 
-import deleteNoteAction from "@/hooks/server/deleteNoteAction";
-import togglePinAction from "@/hooks/server/togglePinAction";
+import DeleteNoteAction from "@/server/DeleteNoteAction";
+import TogglePinAction from "@/server/TogglePinAction";
 import { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -43,7 +43,7 @@ const NoteCardAction = (props: NoteCardActionsProps) => {
     }
 
     try {
-      const result = await togglePinAction(id, shouldPin);
+      const result = await TogglePinAction(id, shouldPin);
       console.log("Pin toggle result:", result);
 
       if (!result.isSuccess) {
@@ -89,7 +89,7 @@ const NoteCardAction = (props: NoteCardActionsProps) => {
     console.log("Calling deleteNoteAction...");
 
     try {
-      const result = await deleteNoteAction(id);
+      const result = await DeleteNoteAction(id);
       console.log("Delete result:", result);
 
       if (!result.isSuccess) {

@@ -1,8 +1,8 @@
 "use client";
 
-import { updateNoteAction } from "@/hooks/server/updateNoteAction";
 import { getBackgroundImage } from "@/lib/backgrounds";
 import { UpdateNoteType, updateNoteSchema } from "@/lib/schema/noteSchema";
+import { updateNoteAction } from "@/server/UpdateNoteAction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "cn";
 import Image from "next/image";
@@ -26,7 +26,7 @@ type EditNoteFormProps = {
 };
 
 const EditNoteForm = ({ note }: EditNoteFormProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -163,7 +163,6 @@ const EditNoteForm = ({ note }: EditNoteFormProps) => {
                 {...field}
                 id="content"
                 placeholder="Take a note..."
-                onFocus={() => setIsExpanded(true)}
                 className={cn(
                   "resize-none border-0 bg-transparent focus-visible:ring-0",
                   !isExpanded ? "min-h-[40px]" : "min-h-[100px]",

@@ -1,6 +1,6 @@
 "use client";
 
-import deleteNoteAction from "@/hooks/server/deleteNoteAction";
+import deleteNoteAction from "@/server/DeleteNoteAction";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

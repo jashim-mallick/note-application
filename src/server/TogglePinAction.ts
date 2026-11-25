@@ -10,7 +10,7 @@ type ActionResult = {
   message: string;
 };
 
-const togglePinAction = async (
+const TogglePinAction = async (
   id: string,
   shouldPin: boolean,
 ): Promise<ActionResult> => {
@@ -58,4 +58,4 @@ const togglePinAction = async (
   }
 };
 
-export default togglePinAction;
+export default TogglePinAction;

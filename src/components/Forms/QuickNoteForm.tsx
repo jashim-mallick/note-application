@@ -2,9 +2,9 @@
 
 import { getBackgroundImage } from "@/lib/backgrounds";
 
-import { createNoteAction } from "@/hooks/server/createNoteAction";
 import { createNoteSchema, NoteType } from "@/lib/schema/noteSchema";
 import { cn } from "@/lib/utils";
+import { CreateNoteAction } from "@/server/CreateNoteAction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -62,7 +62,7 @@ const QuickNoteForm = () => {
   const onSubmit = async (data: NoteType) => {
     if (!data.content?.trim()) return;
 
-    const result = await createNoteAction({
+    const result = await CreateNoteAction({
       title: data.title ?? null,
       content: data.content,
       backgroundId: data.backgroundId,
