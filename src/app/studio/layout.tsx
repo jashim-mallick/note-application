@@ -1,19 +1,22 @@
-import PrivateHeader from "@/components/Header/PrivateHeader";
+import { AppShell } from "@/components/AppLayout/AppShell";
+import { auth } from "@/lib/betterAuth/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 type StudioLayoutProps = {
   children: React.ReactNode;
 };
 
-const StudioLayout = ({ children }: StudioLayoutProps) => {
-  return (
-    <div className="relative min-h-screen">
-      <PrivateHeader />
+const StudioLayout = async ({ children }: StudioLayoutProps) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-      <main className="mx-auto max-w-7xl px-1 py-3 sm:px-3 md:px-6">
-        {children}
-      </main>
-    </div>
-  );
+  if (!session) {
+    redirect("/auth/login");
+  }
+
+  return <AppShell>{children}</AppShell>;
 };
 
 export default StudioLayout;

@@ -4,7 +4,7 @@ import { getBackgroundImage } from "@/lib/backgrounds";
 import { auth } from "@/lib/betterAuth/auth";
 import prisma from "@/lib/database/dbClient";
 import { format } from "date-fns";
-import { ArrowLeft, Pin } from "lucide-react";
+import { ArrowLeft, Pencil, Pin } from "lucide-react";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -95,11 +95,13 @@ const Page = async ({ params }: NotePageProps) => {
       </article>
 
       <div className="mt-6 flex justify-end gap-3">
-        <Button
-          variant="outline"
-          disabled>
-          Edit Note
-          {/* TODO: Add edit functionality */}
+        <Button variant="outline">
+          <Link
+            className="flex items-center"
+            href={`/studio/editNote/${note.id}`}>
+            <Pencil className="mr-2 size-4.5" />
+            Edit
+          </Link>
         </Button>
 
         <DeleteNoteButton noteId={note.id} />
@@ -107,5 +109,6 @@ const Page = async ({ params }: NotePageProps) => {
     </div>
   );
 };
+// src / app / studio / editNote;
 
 export default Page;
