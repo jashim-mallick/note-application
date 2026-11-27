@@ -1,13 +1,20 @@
 "use client";
 
 import { authClient } from "@/lib/betterAuth/auth-client";
-import { LogOutIcon } from "lucide-react";
-import { useRouter } from "next/navigation"; // ← add this
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+
+import { useState } from "react";
 import { Button } from "../shadcnui/button";
+import LogoutIcon from "../shadcnui/logout-icon";
+
+const MotionButton = motion.create(Button);
 
 const LogOutButton = () => {
-  const router = useRouter(); // ← add this
+  const [isHovered, setIsHovered] = useState(false);
+
+  const router = useRouter();
 
   const handleLogOut = async () => {
     try {
@@ -28,10 +35,13 @@ const LogOutButton = () => {
   return (
     <Button
       onClick={handleLogOut}
-      variant="destructive"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      variant="ghost"
       size="sm"
-      className="cursor-pointer">
-      Log Out <LogOutIcon />
+      className="bg-muted text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive justify-center gap-2">
+      LogOut
+      <LogoutIcon isHovered={isHovered} />
     </Button>
   );
 };

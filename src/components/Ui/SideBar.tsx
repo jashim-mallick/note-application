@@ -2,16 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import {
-  ChevronsUpDown,
-  LayoutDashboard,
-  LogOut,
-  UserCircle,
-} from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+import LogOutButton from "../Buttons/LogOutButton";
 import { Avatar, AvatarFallback } from "../shadcnui/avatar";
+import BookmarkIcon from "../shadcnui/bookmark-icon";
+import DashboardGridIcon from "../shadcnui/DashboardGridIcon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +19,7 @@ import {
 } from "../shadcnui/dropdown-menu";
 import { ScrollArea } from "../shadcnui/scroll-area";
 import TrashIcon from "../shadcnui/trash-icon";
+import UserIcon from "../shadcnui/user-icon";
 
 const sidebarVariants = {
   open: { width: "15rem" },
@@ -68,9 +67,11 @@ export const SessionNavBar = ({
   const [accountOpen, setAccountOpen] = useState(false);
   const pathname = usePathname();
 
+  const iconSlot = "flex size-5 shrink-0 items-center justify-center";
+
   const navItemClass = (active: boolean) =>
     cn(
-      "flex h-8 w-full flex-row items-center rounded-md px-2 py-1.5 transition",
+      "flex h-8 w-full flex-row items-center gap-2 rounded-md px-2 py-1.5 transition",
       active ?
         "bg-muted text-blue-600"
       : "text-muted-foreground hover:bg-muted hover:text-primary",
@@ -127,7 +128,7 @@ export const SessionNavBar = ({
               <motion.li variants={variants}>
                 {!isCollapsed && (
                   <p className="text-muted-foreground/60 text-xs font-medium tracking-wider uppercase">
-                    Pinned
+                    Items
                   </p>
                 )}
               </motion.li>
@@ -135,35 +136,56 @@ export const SessionNavBar = ({
 
             <div className="flex h-full w-full flex-col">
               <div className="flex grow flex-col gap-4">
-                <ScrollArea className="h-16 grow p-2">
+                <ScrollArea className="h-20 grow p-2">
                   <div className={cn("flex w-full flex-col gap-1")}>
                     <div
                       className={navItemClass(pathname?.includes("dashboard"))}>
-                      <LayoutDashboard className="h-4 w-4" />
-                      <motion.li variants={variants}>
-                        {!isCollapsed && (
+                      <div className={iconSlot}>
+                        <DashboardGridIcon size={20} />
+                      </div>
+
+                      {!isCollapsed && (
+                        <motion.li variants={variants}>
                           <p className="ml-2 text-sm font-medium">Dashboard</p>
-                        )}
-                      </motion.li>
+                        </motion.li>
+                      )}
+                    </div>
+
+                    <div className={navItemClass(pathname?.includes("Pinned"))}>
+                      <div className={iconSlot}>
+                        <BookmarkIcon size={20} />
+                      </div>
+
+                      {!isCollapsed && (
+                        <motion.li variants={variants}>
+                          <p className="ml-2 text-sm font-medium">Pinned</p>
+                        </motion.li>
+                      )}
                     </div>
 
                     <div className={navItemClass(pathname?.includes("Trash"))}>
-                      <TrashIcon size={40} />
-                      <motion.li variants={variants}>
-                        {!isCollapsed && (
+                      <div className={iconSlot}>
+                        <TrashIcon size={20} />
+                      </div>
+
+                      {!isCollapsed && (
+                        <motion.li variants={variants}>
                           <p className="ml-2 text-sm font-medium">Trash</p>
-                        )}
-                      </motion.li>
+                        </motion.li>
+                      )}
                     </div>
 
                     <div
                       className={navItemClass(pathname?.includes("profile"))}>
-                      <UserCircle className="h-4 w-4" />
-                      <motion.li variants={variants}>
-                        {!isCollapsed && (
+                      <div className={iconSlot}>
+                        <UserIcon size={20} />
+                      </div>
+
+                      {!isCollapsed && (
+                        <motion.li variants={variants}>
                           <p className="ml-2 text-sm font-medium">Profile</p>
-                        )}
-                      </motion.li>
+                        </motion.li>
+                      )}
                     </div>
                   </div>
                 </ScrollArea>
@@ -189,24 +211,34 @@ export const SessionNavBar = ({
                         )}
                       </motion.span>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent sideOffset={5}>
-                      <div className="flex flex-row items-center gap-2 p-2">
-                        <Avatar className="size-6">
+                    <DropdownMenuContent
+                      sideOffset={8}
+                      align="start"
+                      className="border-sidebar-border bg-sidebar text-sidebar-foreground w-64 rounded-xl border p-2 shadow-xl">
+                      <div className="flex items-center gap-3 p-2">
+                        <Avatar className="size-9">
                           <AvatarFallback>Jz</AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col text-left">
-                          <span className="text-sm font-medium">Jaz</span>
-                          <span className="text-muted-foreground line-clamp-1 text-xs">
+
+                        <div className="flex min-w-0 flex-col">
+                          <span className="text-sm font-semibold">Jaz</span>
+                          <span className="text-muted-foreground truncate text-xs">
                             jaz@example.com
                           </span>
                         </div>
                       </div>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="flex items-center gap-2">
-                        <UserCircle className="h-4 w-4" /> Profile
+
+                      <DropdownMenuSeparator className="bg-sidebar-border" />
+
+                      <DropdownMenuItem className="focus:bg-muted focus:text-sidebar-foreground cursor-pointer gap-2 rounded-md px-3 py-2 text-sm">
+                        <UserIcon size={18} />
+                        Profile
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="flex items-center gap-2">
-                        <LogOut className="h-4 w-4" /> Sign out
+
+                      <DropdownMenuSeparator className="bg-sidebar-border" />
+
+                      <DropdownMenuItem className="cursor-pointer rounded-md p-0 focus:bg-transparent">
+                        <LogOutButton />
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
