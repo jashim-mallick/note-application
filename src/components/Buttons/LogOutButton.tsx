@@ -1,15 +1,12 @@
 "use client";
 
 import { authClient } from "@/lib/betterAuth/auth-client";
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 import { useState } from "react";
 import { Button } from "../shadcnui/button";
 import LogoutIcon from "../shadcnui/logout-icon";
-
-const MotionButton = motion.create(Button);
 
 const LogOutButton = () => {
   const [isHovered, setIsHovered] = useState(false);
