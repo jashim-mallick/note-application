@@ -134,6 +134,7 @@ export const SessionNavBar = ({
                 <ScrollArea className="h-20 grow p-2">
                   <div className="flex w-full flex-col gap-1">
                     <NavItem
+                      //TODO: workable link will be added later
                       active={pathname?.includes("dashboard") ?? false}
                       label="Dashboard"
                       isCollapsed={isCollapsed}
@@ -146,6 +147,7 @@ export const SessionNavBar = ({
                     />
 
                     <NavItem
+                      //TODO: workable link will be added later
                       active={pathname?.includes("Pinned") ?? false}
                       label="Pinned"
                       isCollapsed={isCollapsed}
@@ -158,6 +160,7 @@ export const SessionNavBar = ({
                     />
 
                     <NavItem
+                      //TODO: workable link will be added later
                       active={pathname?.includes("Trash") ?? false}
                       label="Trash"
                       isCollapsed={isCollapsed}
@@ -171,6 +174,7 @@ export const SessionNavBar = ({
                     />
 
                     <NavItem
+                      //TODO: workable link will be added later
                       active={pathname?.includes("profile") ?? false}
                       label="Profile"
                       isCollapsed={isCollapsed}
