@@ -1,72 +1,45 @@
 import { motion, useAnimate } from "motion/react";
-import { forwardRef, useImperativeHandle } from "react";
-import type { AnimatedIconHandle, AnimatedIconProps } from "./types";
+import { forwardRef, useEffect } from "react";
+import type { AnimatedIconProps } from "./types";
 import { scaledStrokeWidth } from "./types";
 
-const BookmarkIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+const BookmarkIcon = forwardRef<SVGSVGElement, AnimatedIconProps>(
   (
-    { size = 20, color = "currentColor", strokeWidth = 2, className = "" },
+    {
+      size = 20,
+      color = "currentColor",
+      strokeWidth = 2,
+      className = "",
+      isHovered = false,
+    },
     ref,
   ) => {
     const [scope, animate] = useAnimate();
 
-    const start = async () => {
-      await animate(
+    useEffect(() => {
+      animate(
         ".bookmark-body",
-        {
-          scaleY: 0.9,
-          y: 2,
-        },
+        isHovered ? { scaleY: 0.9, y: 2 } : { scaleY: 1, y: 0 },
         {
           duration: 0.18,
-          ease: "easeOut",
+          ease: isHovered ? "easeOut" : "easeInOut",
         },
       );
-    };
-
-    const stop = async () => {
-      await animate(
-        ".bookmark-body",
-        {
-          scaleY: 1,
-          y: 0,
-        },
-        {
-          duration: 0.18,
-          ease: "easeInOut",
-        },
-      );
-    };
-
-    useImperativeHandle(ref, () => {
-      return {
-        startAnimation: start,
-        stopAnimation: stop,
-      };
-    });
-
-    const handleHoverStart = () => {
-      start();
-    };
-
-    const handleHoverEnd = () => {
-      stop();
-    };
+    }, [isHovered, animate]);
 
     return (
-      <motion.div
+      <div
         ref={scope}
-        onHoverStart={handleHoverStart}
-        onHoverEnd={handleHoverEnd}
-        className={`inline-flex cursor-pointer ${className}`}>
+        className={`inline-flex ${className}`}>
         <svg
+          ref={ref}
           xmlns="http://www.w3.org/2000/svg"
           width={size}
           height={size}
           viewBox="0 0 48 48"
           fill="none"
           stroke={color}
-          strokeWidth={scaledStrokeWidth(strokeWidth, 40)}
+          strokeWidth={scaledStrokeWidth(Number(strokeWidth), 40)}
           strokeMiterlimit="10"
           strokeLinecap="square">
           <motion.path
@@ -75,7 +48,7 @@ const BookmarkIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
             d="M24 34L41 44V8C41 5.23858 38.7614 3 36 3H12C9.23858 3 7 5.23858 7 8V44L24 34Z"
           />
         </svg>
-      </motion.div>
+      </div>
     );
   },
 );

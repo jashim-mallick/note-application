@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import LogOutButton from "../Buttons/LogOutButton";
+import NavItem from "./NavItem";
+
 import { Avatar, AvatarFallback } from "../shadcnui/avatar";
 import BookmarkIcon from "../shadcnui/bookmark-icon";
 import DashboardGridIcon from "../shadcnui/DashboardGridIcon";
@@ -67,16 +69,6 @@ export const SessionNavBar = ({
   const [accountOpen, setAccountOpen] = useState(false);
   const pathname = usePathname();
 
-  const iconSlot = "flex size-5 shrink-0 items-center justify-center";
-
-  const navItemClass = (active: boolean) =>
-    cn(
-      "flex h-8 w-full flex-row items-center gap-2 rounded-md px-2 py-1.5 transition",
-      active ?
-        "bg-muted text-blue-600"
-      : "text-muted-foreground hover:bg-muted hover:text-primary",
-    );
-
   return (
     <motion.div
       className={cn(
@@ -88,7 +80,9 @@ export const SessionNavBar = ({
       variants={sidebarVariants}
       transition={transitionProps}
       onMouseEnter={() => {
-        if (window.innerWidth >= 640) setIsCollapsed(false);
+        if (window.innerWidth >= 640) {
+          setIsCollapsed(false);
+        }
       }}
       onMouseLeave={() => {
         if (window.innerWidth >= 640) {
@@ -110,6 +104,7 @@ export const SessionNavBar = ({
                     N
                   </AvatarFallback>
                 </Avatar>
+
                 <motion.li
                   variants={variants}
                   className="flex items-center gap-2">
@@ -137,112 +132,111 @@ export const SessionNavBar = ({
             <div className="flex h-full w-full flex-col">
               <div className="flex grow flex-col gap-4">
                 <ScrollArea className="h-20 grow p-2">
-                  <div className={cn("flex w-full flex-col gap-1")}>
-                    <div
-                      className={navItemClass(pathname?.includes("dashboard"))}>
-                      <div className={iconSlot}>
-                        <DashboardGridIcon size={20} />
-                      </div>
-
-                      {!isCollapsed && (
-                        <motion.li variants={variants}>
-                          <p className="ml-2 text-sm font-medium">Dashboard</p>
-                        </motion.li>
+                  <div className="flex w-full flex-col gap-1">
+                    <NavItem
+                      active={pathname?.includes("dashboard") ?? false}
+                      label="Dashboard"
+                      isCollapsed={isCollapsed}
+                      renderIcon={(isHovered) => (
+                        <DashboardGridIcon
+                          size={20}
+                          isHovered={isHovered}
+                        />
                       )}
-                    </div>
+                    />
 
-                    <div className={navItemClass(pathname?.includes("Pinned"))}>
-                      <div className={iconSlot}>
-                        <BookmarkIcon size={20} />
-                      </div>
-
-                      {!isCollapsed && (
-                        <motion.li variants={variants}>
-                          <p className="ml-2 text-sm font-medium">Pinned</p>
-                        </motion.li>
+                    <NavItem
+                      active={pathname?.includes("Pinned") ?? false}
+                      label="Pinned"
+                      isCollapsed={isCollapsed}
+                      renderIcon={(isHovered) => (
+                        <BookmarkIcon
+                          size={20}
+                          isHovered={isHovered}
+                        />
                       )}
-                    </div>
+                    />
 
-                    <div className={navItemClass(pathname?.includes("Trash"))}>
-                      <div className={iconSlot}>
-                        <TrashIcon size={20} />
-                      </div>
-
-                      {!isCollapsed && (
-                        <motion.li variants={variants}>
-                          <p className="ml-2 text-sm font-medium">Trash</p>
-                        </motion.li>
+                    <NavItem
+                      active={pathname?.includes("Trash") ?? false}
+                      label="Trash"
+                      isCollapsed={isCollapsed}
+                      renderIcon={(isHover) => (
+                        <TrashIcon
+                          size={20}
+                          isHover={isHover}
+                          shakeOnClick
+                        />
                       )}
-                    </div>
+                    />
 
-                    <div
-                      className={navItemClass(pathname?.includes("profile"))}>
-                      <div className={iconSlot}>
-                        <UserIcon size={20} />
-                      </div>
-
-                      {!isCollapsed && (
-                        <motion.li variants={variants}>
-                          <p className="ml-2 text-sm font-medium">Profile</p>
-                        </motion.li>
+                    <NavItem
+                      active={pathname?.includes("profile") ?? false}
+                      label="Profile"
+                      isCollapsed={isCollapsed}
+                      renderIcon={(isHovered) => (
+                        <UserIcon
+                          size={20}
+                          isHovered={isHovered}
+                        />
                       )}
-                    </div>
+                    />
                   </div>
                 </ScrollArea>
               </div>
 
               <div className="flex flex-col p-2">
-                <div>
-                  <DropdownMenu
-                    open={accountOpen}
-                    onOpenChange={setAccountOpen}>
-                    <DropdownMenuTrigger className="hover:bg-muted hover:text-primary flex h-8 w-full flex-row items-center gap-2 rounded-md px-2 py-1.5 transition">
-                      <Avatar className="size-4">
-                        <AvatarFallback>A</AvatarFallback>
+                <DropdownMenu
+                  open={accountOpen}
+                  onOpenChange={setAccountOpen}>
+                  <DropdownMenuTrigger className="hover:bg-muted hover:text-primary flex h-8 w-full flex-row items-center gap-2 rounded-md px-2 py-1.5 transition">
+                    <Avatar className="size-4">
+                      <AvatarFallback>A</AvatarFallback>
+                    </Avatar>
+
+                    <motion.span
+                      variants={variants}
+                      className="flex w-full items-center gap-2">
+                      {!isCollapsed && (
+                        <>
+                          <p className="text-sm font-medium">Account</p>
+                          <ChevronsUpDown className="text-muted-foreground/50 ml-auto h-4 w-4" />
+                        </>
+                      )}
+                    </motion.span>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent
+                    sideOffset={8}
+                    align="start"
+                    className="border-sidebar-border bg-sidebar text-sidebar-foreground w-64 rounded-xl border p-2 shadow-xl">
+                    <div className="flex items-center gap-3 p-2">
+                      <Avatar className="size-9">
+                        <AvatarFallback>Jz</AvatarFallback>
                       </Avatar>
-                      <motion.span
-                        variants={variants}
-                        className="flex w-full items-center gap-2">
-                        {!isCollapsed && (
-                          <>
-                            <p className="text-sm font-medium">Account</p>
-                            <ChevronsUpDown className="text-muted-foreground/50 ml-auto h-4 w-4" />
-                          </>
-                        )}
-                      </motion.span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      sideOffset={8}
-                      align="start"
-                      className="border-sidebar-border bg-sidebar text-sidebar-foreground w-64 rounded-xl border p-2 shadow-xl">
-                      <div className="flex items-center gap-3 p-2">
-                        <Avatar className="size-9">
-                          <AvatarFallback>Jz</AvatarFallback>
-                        </Avatar>
 
-                        <div className="flex min-w-0 flex-col">
-                          <span className="text-sm font-semibold">Jaz</span>
-                          <span className="text-muted-foreground truncate text-xs">
-                            jaz@example.com
-                          </span>
-                        </div>
+                      <div className="flex min-w-0 flex-col">
+                        <span className="text-sm font-semibold">Jaz</span>
+                        <span className="text-muted-foreground truncate text-xs">
+                          jaz@example.com
+                        </span>
                       </div>
+                    </div>
 
-                      <DropdownMenuSeparator className="bg-sidebar-border" />
+                    <DropdownMenuSeparator className="bg-sidebar-border" />
 
-                      <DropdownMenuItem className="focus:bg-muted focus:text-sidebar-foreground cursor-pointer gap-2 rounded-md px-3 py-2 text-sm">
-                        <UserIcon size={18} />
-                        Profile
-                      </DropdownMenuItem>
+                    <DropdownMenuItem className="focus:bg-muted focus:text-sidebar-foreground cursor-pointer gap-2 rounded-md px-3 py-2 text-sm">
+                      <UserIcon size={18} />
+                      Profile
+                    </DropdownMenuItem>
 
-                      <DropdownMenuSeparator className="bg-sidebar-border" />
+                    <DropdownMenuSeparator className="bg-sidebar-border" />
 
-                      <DropdownMenuItem className="cursor-pointer rounded-md p-0 focus:bg-transparent">
-                        <LogOutButton />
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                    <DropdownMenuItem className="cursor-pointer rounded-md p-0 focus:bg-transparent">
+                      <LogOutButton />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>

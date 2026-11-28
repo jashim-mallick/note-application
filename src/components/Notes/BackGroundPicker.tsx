@@ -64,35 +64,38 @@ type BackgroundPickerProps = {
 
 const BackgroundPicker = ({ value, onChange }: BackgroundPickerProps) => {
   return (
-    <div className="flex flex-wrap gap-2">
-      {predefinedBackgrounds.map((bg) => (
-        <button
-          key={bg.id}
-          type="button"
-          onClick={() => onChange(bg.id === "none" ? null : bg.id)}
-          className={`relative h-12 w-12 overflow-hidden rounded-md border-2 transition-all ${
-            value === bg.id || (bg.id === "none" && value === null) ?
-              "border-primary ring-primary/30 ring-2"
-            : "border-border hover:border-muted-foreground"
-          }`}
-          aria-label={`Use ${bg.name} background`}
-          title={bg.name}>
-          {bg.image ?
-            <Image
-              src={bg.image}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="48px"
-            />
-          : <div className="bg-muted h-full w-full" />}
-          {value === bg.id && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-              <Check className="size-4 text-white" />
-            </div>
-          )}
-        </button>
-      ))}
+    <div className="flex flex-col gap-2">
+      <div className="">Presets</div>
+      <div className="flex flex-wrap gap-2">
+        {predefinedBackgrounds.map((bg) => (
+          <button
+            key={bg.id}
+            type="button"
+            onClick={() => onChange(bg.id === "none" ? null : bg.id)}
+            className={`relative h-12 w-12 overflow-hidden rounded-md border-2 transition-all ${
+              value === bg.id || (bg.id === "none" && value === null) ?
+                "border-primary ring-primary/30 ring-2"
+              : "border-border hover:border-muted-foreground"
+            }`}
+            aria-label={`Use ${bg.name} background`}
+            title={bg.name}>
+            {bg.image ?
+              <Image
+                src={bg.image}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
+            : <div className="bg-muted h-full w-full" />}
+            {value === bg.id && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                <Check className="size-4 text-white" />
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

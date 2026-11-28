@@ -1,148 +1,79 @@
-import { motion, useAnimate } from "motion/react";
-import { forwardRef, useCallback, useImperativeHandle } from "react";
-import type { AnimatedIconHandle, AnimatedIconProps } from "./types";
+import { motion } from "motion/react";
+import { useCallback } from "react";
+import type { AnimatedIconProps } from "./types";
 
 export interface TrashIconProps extends AnimatedIconProps {
   shakeOnClick?: boolean;
   dangerHover?: boolean;
   keepOpenOnDelete?: boolean;
+  isHover?: boolean;
 }
 
-const TrashIcon = forwardRef<AnimatedIconHandle, TrashIconProps>(
-  (
-    {
-      shakeOnClick = false,
-      dangerHover = false,
-      keepOpenOnDelete = false,
-      size = 20,
-      color = "currentColor",
-      strokeWidth = 2,
-      className = "",
-    },
-    ref,
-  ) => {
-    const [scope, animate] = useAnimate();
+const TrashIcon = ({
+  shakeOnClick = false,
+  dangerHover = false,
+  keepOpenOnDelete = false,
+  size = 20,
+  color = "currentColor",
+  strokeWidth = 2,
+  className = "",
+  isHover = false,
+}: TrashIconProps) => {
+  const clickAnimation = useCallback(() => {}, []);
 
-    const openLid = useCallback(async () => {
-      await Promise.all([
-        animate(
-          ".trash-lid-lower",
-          { rotate: -25, y: -4 },
-          { duration: 0.25, ease: "easeOut" },
-        ),
-        animate(
-          ".trash-lid-upper",
-          { rotate: -35, y: -6, x: -2 },
-          { duration: 0.25, ease: "easeOut" },
-        ),
-      ]);
-    }, [animate]);
-
-    const closeLid = useCallback(async () => {
-      await Promise.all([
-        animate(
-          ".trash-lid-lower",
-          { rotate: 0, y: 0 },
-          { duration: 0.2, ease: "easeInOut" },
-        ),
-        animate(
-          ".trash-lid-upper",
-          { rotate: 0, y: 0, x: 0 },
-          { duration: 0.2, ease: "easeInOut" },
-        ),
-      ]);
-    }, [animate]);
-
-    const dangerHoverAnimation = useCallback(async () => {
-      if (!dangerHover) return;
-
-      await animate(
-        ".trash-icon",
-        { stroke: "#ef4444" },
-        { duration: 0.2, delay: 0.1, ease: "easeInOut" },
-      );
-    }, [animate, dangerHover]);
-
-    const resetColor = useCallback(async () => {
-      if (!dangerHover) return;
-
-      await animate(
-        ".trash-icon",
-        { stroke: "currentColor" },
-        { duration: 0.2, ease: "easeInOut" },
-      );
-    }, [animate, dangerHover]);
-
-    const hoverAnimation = useCallback(async () => {
-      await openLid();
-      await dangerHoverAnimation();
-    }, [openLid, dangerHoverAnimation]);
-
-    const hoverEndAnimation = useCallback(async () => {
-      resetColor();
-      closeLid();
-    }, [resetColor, closeLid]);
-
-    const clickAnimation = useCallback(async () => {
-      if (shakeOnClick) {
-        await animate(
-          ".trash-icon",
-          { x: [0, -2, 2, -1, 0] },
-          { duration: 0.25, ease: "easeInOut" },
-        );
-      }
-
-      if (keepOpenOnDelete) {
-        await openLid();
-      }
-    }, [shakeOnClick, keepOpenOnDelete, animate, openLid]);
-
-    useImperativeHandle(ref, () => ({
-      startAnimation: openLid,
-      stopAnimation: closeLid,
-    }));
-
-    return (
-      <motion.svg
-        ref={scope}
-        className={`cursor-pointer ${className} trash-icon`}
-        onHoverStart={hoverAnimation}
-        onHoverEnd={hoverEndAnimation}
-        onTap={clickAnimation}
-        xmlns="http://www.w3.org/2000/svg"
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
+  return (
+    <motion.svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={isHover && dangerHover ? "#ef4444" : color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      style={{ display: "block", flexShrink: 0 }}
+      animate={{
+        x: 0,
+      }}
+      whileTap={shakeOnClick ? { x: [0, -2, 2, -1, 0] } : undefined}
+      transition={{ duration: 0.2 }}
+      onTap={clickAnimation}>
+      <path
+        stroke="none"
+        d="M0 0h24v24H0z"
         fill="none"
-        stroke={color}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round">
-        <path
-          stroke="none"
-          d="M0 0h24v24H0z"
-          fill="none"
-        />
+      />
 
-        <motion.path
-          d="M4 7l16 0"
-          className="trash-lid-lower"
-          style={{ transformOrigin: "50% 100%" }}
-        />
+      <motion.path
+        d="M4 7l16 0"
+        className="trash-lid-lower"
+        style={{ transformOrigin: "50% 100%" }}
+        animate={{
+          rotate: isHover || keepOpenOnDelete ? -25 : 0,
+          y: isHover || keepOpenOnDelete ? -4 : 0,
+        }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      />
 
-        <path d="M10 11l0 6" />
-        <path d="M14 11l0 6" />
-        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+      <path d="M10 11l0 6" />
+      <path d="M14 11l0 6" />
+      <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
 
-        <motion.path
-          d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"
-          className="trash-lid-upper"
-          style={{ transformOrigin: "50% 100%" }}
-        />
-      </motion.svg>
-    );
-  },
-);
+      <motion.path
+        d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"
+        className="trash-lid-upper"
+        style={{ transformOrigin: "50% 100%" }}
+        animate={{
+          rotate: isHover || keepOpenOnDelete ? -35 : 0,
+          y: isHover || keepOpenOnDelete ? -6 : 0,
+          x: isHover || keepOpenOnDelete ? -2 : 0,
+        }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      />
+    </motion.svg>
+  );
+};
 
-TrashIcon.displayName = "TrashIcon";
 export default TrashIcon;

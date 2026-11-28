@@ -26,7 +26,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <PrivateHeader
           onMenuClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
-        <main className="mx-auto max-w-7xl px-1 py-3 sm:px-3 md:px-6">
+        <main className="mx-auto w-full max-w-7xl px-1 py-3 sm:px-3 md:px-6">
           {children}
         </main>
       </div>
